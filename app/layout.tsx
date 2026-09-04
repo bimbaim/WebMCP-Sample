@@ -32,9 +32,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                // WebMCP API: navigator.registerTool (not navigator.modelContext)
-                if (typeof navigator.registerTool !== 'function') {
-                  console.log('WebMCP registerTool API not available');
+                // WebMCP Imperative API: document.modelContext (navigator.modelContext deprecated in Chrome 150)
+                if (!document.modelContext) {
+                  console.log('WebMCP document.modelContext not available');
                   return;
                 }
                 const tools = [
@@ -172,7 +172,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 
                 for (const tool of tools) {
                   try {
-                    navigator.registerTool({
+                    document.modelContext.registerTool({
                       name: tool.name,
                       title: tool.name.replace(/_/g, ' ').toUpperCase(),
                       description: tool.description,
