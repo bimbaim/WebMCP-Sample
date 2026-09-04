@@ -38,13 +38,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 const tools = [
                   {
                     name: "search_products",
-                    description: "Search for products by keyword or name",
+                    description: "Cari produk berdasarkan nama atau kata kunci",
                     inputSchema: {
                       type: "object",
                       properties: {
                         query: {
                           type: "string",
-                          description: "Search query (product name or keyword). Example: 'wireless headphones'"
+                          description: "Kata kunci pencarian. Contoh: 'wireless', 'keyboard', 'dress'"
                         }
                       },
                       required: ["query"]
@@ -52,14 +52,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   },
                   {
                     name: "filter_by_category",
-                    description: "Get all products in a specific category",
+                    description: "Lihat semua produk dalam kategori tertentu: elektronik, fashion, atau rumah",
                     inputSchema: {
                       type: "object",
                       properties: {
                         category: {
                           type: "string",
                           enum: ["electronics", "fashion", "home"],
-                          description: "Product category to filter by"
+                          description: "Kategori: electronics (elektronik), fashion (pakaian), atau home (rumah tangga)"
                         }
                       },
                       required: ["category"]
@@ -67,13 +67,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   },
                   {
                     name: "get_product",
-                    description: "Get detailed information about a specific product including price, rating, and stock",
+                    description: "Dapatkan detail lengkap produk tertentu dengan harga, rating, stok, dan deskripsi",
                     inputSchema: {
                       type: "object",
                       properties: {
                         id: {
                           type: "string",
-                          description: "The unique product identifier"
+                          description: "ID produk. Format: elec-001, fash-001, home-001 dll"
                         }
                       },
                       required: ["id"]
@@ -81,7 +81,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   },
                   {
                     name: "get_cart",
-                    description: "View the current shopping cart with all items, quantities, and total price",
+                    description: "Lihat isi keranjang belanja saat ini dengan jumlah item dan total harga",
                     inputSchema: {
                       type: "object",
                       properties: {}
@@ -89,18 +89,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   },
                   {
                     name: "add_to_cart",
-                    description: "Add a product to the shopping cart with optional quantity",
+                    description: "Tambahkan produk ke keranjang belanja",
                     inputSchema: {
                       type: "object",
                       properties: {
                         productId: {
                           type: "string",
-                          description: "The unique product identifier to add to cart"
-                        },
-                        quantity: {
-                          type: "number",
-                          description: "Number of items to add (default: 1)",
-                          default: 1
+                          description: "ID produk yang akan ditambahkan. Contoh: elec-001"
                         }
                       },
                       required: ["productId"]
@@ -108,13 +103,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   },
                   {
                     name: "remove_from_cart",
-                    description: "Remove a product from the shopping cart",
+                    description: "Hapus produk dari keranjang belanja",
                     inputSchema: {
                       type: "object",
                       properties: {
                         productId: {
                           type: "string",
-                          description: "The unique product identifier to remove from cart"
+                          description: "ID produk yang akan dihapus dari keranjang"
                         }
                       },
                       required: ["productId"]
@@ -122,17 +117,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   },
                   {
                     name: "checkout",
-                    description: "Place an order with customer details and complete the purchase",
+                    description: "Lakukan checkout dan buat pesanan baru",
                     inputSchema: {
                       type: "object",
                       properties: {
                         customerName: {
                           type: "string",
-                          description: "Full name of the customer placing the order"
+                          description: "Nama lengkap pelanggan"
                         },
                         customerEmail: {
                           type: "string",
-                          description: "Email address for order confirmation"
+                          description: "Email untuk konfirmasi pesanan"
                         }
                       },
                       required: ["customerName", "customerEmail"]
