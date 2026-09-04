@@ -98,12 +98,20 @@ export default function HomePage() {
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
           Ready to explore?
         </h2>
-        <Link
-          href="/products"
-          className="inline-block bg-emerald-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition-colors"
-        >
-          Browse Products
-        </Link>
+        <div className="flex gap-4 justify-center flex-wrap">
+          <Link
+            href="/products"
+            className="inline-block bg-emerald-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition-colors"
+          >
+            Browse Products
+          </Link>
+          <Link
+            href="/tools"
+            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            🛠️ View Tools Status
+          </Link>
+        </div>
       </div>
     </div>
   );

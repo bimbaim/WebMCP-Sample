@@ -14,10 +14,27 @@ export function WebMCPProvider({ children }: { children: React.ReactNode }) {
 
     const mc = navigator.modelContext;
     if (!mc) {
-      console.log("WebMCP not available - Chrome 146+ required");
+      console.warn(
+        "%c⚠️ WebMCP NOT Available",
+        "color: #ff9800; font-weight: bold; font-size: 12px;"
+      );
+      console.log(
+        "%cNavigator.modelContext is undefined",
+        "color: #ff9800",
+        "This requires Chrome 146+ with WebMCP support enabled."
+      );
+      console.log(
+        "%cBut don't worry!",
+        "color: #4caf50",
+        "Server-side MCP tools are still available at /api/mcp"
+      );
       return;
     }
 
+    console.log(
+      "%c✅ WebMCP Available",
+      "color: #4caf50; font-weight: bold; font-size: 12px;"
+    );
     console.log("Registering WebMCP tools...");
 
     // Tool 1: Search products
@@ -217,7 +234,23 @@ export function WebMCPProvider({ children }: { children: React.ReactNode }) {
       },
     });
 
-    console.log("WebMCP tools registered successfully");
+    console.log(
+      "%c✅ WebMCP tools registered successfully (7 tools)",
+      "color: #4caf50; font-weight: bold;"
+    );
+    console.table([
+      { Tool: "search_products", Type: "Browser" },
+      { Tool: "filter_by_category", Type: "Browser" },
+      { Tool: "get_product", Type: "Browser" },
+      { Tool: "get_cart", Type: "Browser" },
+      { Tool: "add_to_cart", Type: "Browser" },
+      { Tool: "remove_from_cart", Type: "Browser" },
+      { Tool: "checkout", Type: "Browser" },
+    ]);
+    console.log(
+      "%cServer-side MCP endpoint available at /api/mcp (6 additional tools)",
+      "color: #2196f3"
+    );
   }, [cart]);
 
   return <>{children}</>;
