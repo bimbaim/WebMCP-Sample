@@ -79,8 +79,8 @@ export function CheckoutForm() {
     <form
       onSubmit={handleSubmit}
       className="space-y-6"
-      data-mcp-tool="checkout"
-      data-mcp-description="Lakukan checkout dan buat pesanan baru dengan informasi pelanggan">
+      toolname="checkout"
+      tooldescription="Lakukan checkout dan buat pesanan baru dengan informasi pelanggan">
 
       {/* Error Message */}
       {error && (
@@ -105,7 +105,7 @@ export function CheckoutForm() {
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="John Doe"
-              data-mcp-description="Nama lengkap pelanggan"
+              toolparamdescription="Nama lengkap pelanggan"
             />
           </div>
 
@@ -121,7 +121,7 @@ export function CheckoutForm() {
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="john@example.com"
-              data-mcp-description="Email untuk konfirmasi pesanan"
+              toolparamdescription="Email untuk konfirmasi pesanan"
             />
           </div>
         </div>
@@ -142,7 +142,7 @@ export function CheckoutForm() {
               onChange={handleInputChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="123 Main St"
-              data-mcp-description="Alamat pengiriman"
+              toolparamdescription="Alamat pengiriman"
             />
           </div>
 
@@ -158,7 +158,7 @@ export function CheckoutForm() {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 placeholder="New York"
-                data-mcp-description="Kota tujuan pengiriman"
+                toolparamdescription="Kota tujuan pengiriman"
               />
             </div>
 
@@ -173,7 +173,7 @@ export function CheckoutForm() {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 placeholder="10001"
-                data-mcp-description="Kode pos pengiriman"
+                toolparamdescription="Kode pos pengiriman"
               />
             </div>
           </div>

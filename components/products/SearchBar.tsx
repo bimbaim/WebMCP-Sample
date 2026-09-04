@@ -22,18 +22,28 @@ export function SearchBar({
     [onSearch]
   );
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
   return (
-    <div className="flex gap-2" toolname="search_products" tooldescription="Search for products by keyword">
+    <form
+      onSubmit={handleSubmit}
+      className="flex gap-2"
+      toolname="search_products"
+      tooldescription="Cari produk berdasarkan nama atau kata kunci">
       <input
         type="text"
+        name="query"
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
-        toolparamdescription="Search query (product name or keyword)"
+        toolparamdescription="Kata kunci pencarian. Contoh: 'wireless', 'keyboard', 'dress'"
         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
       />
       {value && (
         <button
+          type="reset"
           onClick={() => {
             setValue("");
             onSearch("");
@@ -43,6 +53,6 @@ export function SearchBar({
           Clear
         </button>
       )}
-    </div>
+    </form>
   );
 }
