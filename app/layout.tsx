@@ -32,9 +32,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                if (!navigator.modelContext) return;
-
-                const mc = navigator.modelContext;
+                // WebMCP API: navigator.registerTool (not navigator.modelContext)
+                if (typeof navigator.registerTool !== 'function') {
+                  console.log('WebMCP registerTool API not available');
+                  return;
+                }
                 const tools = [
                   {
                     name: "search_products",
@@ -135,52 +137,54 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   }
                 ];
 
-                // Defer registration until modelContext is ready
-                let retries = 0;
-                const registerTools = () => {
-                  try {
-                    for (const tool of tools) {
-                      mc.registerTool({
-                        ...tool,
-                        execute: async (args) => {
-                          try {
-                            // Call the backend MCP server
-                            const response = await fetch('/api/mcp', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                jsonrpc: '2.0',
-                                method: 'tools/call',
-                                params: { name: tool.name, arguments: args },
-                                id: Date.now()
-                              })
-                            });
+                // Register tools using navigator.registerTool API
+                let registeredCount = 0;
 
-                            const data = await response.text();
-                            // Parse the SSE response
-                            const match = data.match(/data: ({.*})/);
-                            if (match) {
-                              const result = JSON.parse(match[1]);
-                              return result.result?.content?.[0]?.text || JSON.stringify(result);
-                            }
-                            return data;
-                          } catch (error) {
-                            return JSON.stringify({ error: error.message });
+                for (const tool of tools) {
+                  try {
+                    navigator.registerTool(tool.name, {
+                      title: tool.name.replace(/_/g, ' ').toUpperCase(),
+                      description: tool.description,
+                      inputSchema: tool.inputSchema,
+                      execute: async (args) => {
+                        try {
+                          // Call the backend MCP server
+                          const response = await fetch('/api/mcp', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              jsonrpc: '2.0',
+                              method: 'tools/call',
+                              params: { name: tool.name, arguments: args },
+                              id: Date.now()
+                            })
+                          });
+
+                          const data = await response.text();
+                          // Parse the SSE response
+                          const match = data.match(/data: ({.*})/);
+                          if (match) {
+                            const result = JSON.parse(match[1]);
+                            return result.result?.content?.[0]?.text || JSON.stringify(result);
                           }
+                          return data;
+                        } catch (error) {
+                          return JSON.stringify({ error: error.message });
                         }
-                      });
-                    }
-                    window.__webmcpReady = true;
-                    window.__webmcpToolsCount = tools.length;
-                    window.dispatchEvent(new CustomEvent('webmcp-ready', { detail: { ready: true, toolsCount: tools.length } }));
-                    console.log('%c✅ WebMCP tools registered immediately (7 tools)', 'color: #4caf50; font-weight: bold;');
+                      }
+                    });
+                    registeredCount++;
                   } catch (e) {
-                    if (retries++ < 10) {
-                      setTimeout(registerTools, 100);
-                    }
+                    console.log('Failed to register tool ' + tool.name + ':', e.message);
                   }
-                };
-                registerTools();
+                }
+
+                if (registeredCount > 0) {
+                  window.__webmcpReady = true;
+                  window.__webmcpToolsCount = registeredCount;
+                  window.dispatchEvent(new CustomEvent('webmcp-ready', { detail: { ready: true, toolsCount: registeredCount } }));
+                  console.log('%c✅ WebMCP tools registered using navigator.registerTool (' + registeredCount + ' tools)', 'color: #4caf50; font-weight: bold;');
+                }
               })();
             `,
           }}
