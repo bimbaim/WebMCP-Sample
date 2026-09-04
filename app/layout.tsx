@@ -182,8 +182,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                         consequentialHint: ['checkout', 'add_to_cart', 'remove_from_cart'].includes(tool.name),
                         untrustedContentHint: false
                       },
-                      execute: async (args, { signal }) => {
+                      execute: async (args, options) => {
                         try {
+                          // Get signal from options if available
+                          const signal = options?.signal;
+
                           // Map frontend tool names to backend tool names
                           let backendToolName = tool.name;
                           let backendArgs = args;
@@ -205,7 +208,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                           }
 
                           // Call the backend MCP server with cancellation support
-                          const response = await fetch('/api/mcp', {
+                          const fetchOptions = {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -213,9 +216,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                               method: 'tools/call',
                               params: { name: backendToolName, arguments: backendArgs },
                               id: Date.now()
-                            }),
-                            signal: signal
-                          });
+                            })
+                          };
+
+                          // Add signal if available
+                          if (signal) {
+                            fetchOptions.signal = signal;
+                          }
+
+                          const response = await fetch('/api/mcp', fetchOptions);
 
                           const data = await response.text();
                           // Parse the SSE response
@@ -227,7 +236,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                           return data;
                         } catch (error) {
                           if (error.name === 'AbortError') {
-                            return JSON.stringify({ cancelled: true, message: 'Tool execution cancelled by user or agent' });
+                            return JSON.stringify({ cancelled: true, message: 'Tool execution cancelled' });
                           }
                           return JSON.stringify({ error: error.message });
                         }
