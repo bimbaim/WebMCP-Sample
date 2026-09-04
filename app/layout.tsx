@@ -50,6 +50,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                         }
                       },
                       required: ["query"]
+                    },
+                    outputSchema: {
+                      type: "string",
+                      description: "JSON array of products matching the search query"
                     }
                   },
                   {
@@ -65,6 +69,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                         }
                       },
                       required: ["category"]
+                    },
+                    outputSchema: {
+                      type: "string",
+                      description: "JSON array of products in the selected category"
                     }
                   },
                   {
@@ -79,6 +87,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                         }
                       },
                       required: ["id"]
+                    },
+                    outputSchema: {
+                      type: "string",
+                      description: "JSON object with complete product details including name, price, rating, stock, description"
                     }
                   },
                   {
@@ -87,6 +99,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                     inputSchema: {
                       type: "object",
                       properties: {}
+                    },
+                    outputSchema: {
+                      type: "string",
+                      description: "JSON object with cart items, quantities, and total price"
                     }
                   },
                   {
@@ -101,6 +117,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                         }
                       },
                       required: ["productId"]
+                    },
+                    outputSchema: {
+                      type: "string",
+                      description: "JSON object confirming product was added with success status and cart size"
                     }
                   },
                   {
@@ -115,6 +135,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                         }
                       },
                       required: ["productId"]
+                    },
+                    outputSchema: {
+                      type: "string",
+                      description: "JSON object confirming product was removed from cart"
                     }
                   },
                   {
@@ -133,6 +157,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                         }
                       },
                       required: ["customerName", "customerEmail"]
+                    },
+                    outputSchema: {
+                      type: "string",
+                      description: "JSON object with order confirmation including orderId, status, and total price"
                     }
                   }
                 ];
