@@ -138,11 +138,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 ];
 
                 // Register tools using navigator.registerTool API
+                // Signature: navigator.registerTool(toolDefinition)
+                // toolDefinition MUST include 'name' property
                 let registeredCount = 0;
 
                 for (const tool of tools) {
                   try {
-                    navigator.registerTool(tool.name, {
+                    navigator.registerTool({
+                      name: tool.name,
                       title: tool.name.replace(/_/g, ' ').toUpperCase(),
                       description: tool.description,
                       inputSchema: tool.inputSchema,
@@ -184,6 +187,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   window.__webmcpToolsCount = registeredCount;
                   window.dispatchEvent(new CustomEvent('webmcp-ready', { detail: { ready: true, toolsCount: registeredCount } }));
                   console.log('%c✅ WebMCP tools registered using navigator.registerTool (' + registeredCount + ' tools)', 'color: #4caf50; font-weight: bold;');
+                } else {
+                  console.warn('%c⚠️ No tools registered', 'color: #ff9800;');
                 }
               })();
             `,
