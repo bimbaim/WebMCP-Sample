@@ -28,6 +28,8 @@ export function WebMCPProvider({ children }: { children: React.ReactNode }) {
         "color: #4caf50",
         "Server-side MCP tools are still available at /api/mcp"
       );
+      // Mark as unavailable for extensions
+      (window as any).__webmcpReady = false;
       return;
     }
 
@@ -36,6 +38,9 @@ export function WebMCPProvider({ children }: { children: React.ReactNode }) {
       "color: #4caf50; font-weight: bold; font-size: 12px;"
     );
     console.log("Registering WebMCP tools...");
+
+    // Signal to extensions that we're starting registration
+    (window as any).__webmcpRegistering = true;
 
     // Tool 1: Search products
     mc.registerTool({
@@ -233,6 +238,30 @@ export function WebMCPProvider({ children }: { children: React.ReactNode }) {
         }
       },
     });
+
+    // Mark as ready for extensions
+    (window as any).__webmcpRegistering = false;
+    (window as any).__webmcpReady = true;
+    (window as any).__webmcpToolsCount = 7;
+
+    // Dispatch event for extensions
+    window.dispatchEvent(
+      new CustomEvent("webmcp-ready", {
+        detail: {
+          ready: true,
+          toolsCount: 7,
+          tools: [
+            "search_products",
+            "filter_by_category",
+            "get_product",
+            "get_cart",
+            "add_to_cart",
+            "remove_from_cart",
+            "checkout",
+          ],
+        },
+      })
+    );
 
     console.log(
       "%c✅ WebMCP tools registered successfully (7 tools)",
