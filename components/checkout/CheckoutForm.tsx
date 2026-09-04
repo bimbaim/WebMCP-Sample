@@ -103,7 +103,7 @@ export function CheckoutForm() {
               value={formData.customerName}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-black"
               placeholder="John Doe"
               toolparamdescription="Nama lengkap pelanggan"
             />
@@ -119,7 +119,7 @@ export function CheckoutForm() {
               value={formData.customerEmail}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-black"
               placeholder="john@example.com"
               toolparamdescription="Email untuk konfirmasi pesanan"
             />
@@ -140,7 +140,7 @@ export function CheckoutForm() {
               name="address"
               value={formData.address}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-black"
               placeholder="123 Main St"
               toolparamdescription="Alamat pengiriman"
             />
@@ -156,7 +156,7 @@ export function CheckoutForm() {
                 name="city"
                 value={formData.city}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-black"
                 placeholder="New York"
                 toolparamdescription="Kota tujuan pengiriman"
               />
@@ -171,7 +171,7 @@ export function CheckoutForm() {
                 name="zipCode"
                 value={formData.zipCode}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-black"
                 placeholder="10001"
                 toolparamdescription="Kode pos pengiriman"
               />

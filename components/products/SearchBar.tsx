@@ -39,7 +39,7 @@ export function SearchBar({
         onChange={handleChange}
         placeholder={placeholder}
         toolparamdescription="Kata kunci pencarian. Contoh: 'wireless', 'keyboard', 'dress'"
-        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-black"
       />
       {value && (
         <button
