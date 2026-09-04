@@ -179,6 +179,26 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                       inputSchema: tool.inputSchema,
                       execute: async (args) => {
                         try {
+                          // Map frontend tool names to backend tool names
+                          let backendToolName = tool.name;
+                          let backendArgs = args;
+
+                          // Handle mapping
+                          if (tool.name === 'search_products') {
+                            backendToolName = 'list_products';
+                            backendArgs = { search: args.query };
+                          } else if (tool.name === 'filter_by_category') {
+                            backendToolName = 'list_products';
+                            backendArgs = { category: args.category };
+                          } else if (tool.name === 'checkout') {
+                            backendToolName = 'create_order';
+                            // checkout needs items from cart, but we don't have that
+                            return JSON.stringify({ error: 'Checkout requires cart data - use via website' });
+                          } else if (tool.name === 'get_cart' || tool.name === 'remove_from_cart') {
+                            // These are client-side only tools
+                            return JSON.stringify({ message: 'This is a client-side tool' });
+                          }
+
                           // Call the backend MCP server
                           const response = await fetch('/api/mcp', {
                             method: 'POST',
@@ -186,7 +206,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                             body: JSON.stringify({
                               jsonrpc: '2.0',
                               method: 'tools/call',
-                              params: { name: tool.name, arguments: args },
+                              params: { name: backendToolName, arguments: backendArgs },
                               id: Date.now()
                             })
                           });
