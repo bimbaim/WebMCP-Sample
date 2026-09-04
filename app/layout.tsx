@@ -177,7 +177,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                       title: tool.name.replace(/_/g, ' ').toUpperCase(),
                       description: tool.description,
                       inputSchema: tool.inputSchema,
-                      execute: async (args) => {
+                      annotations: {
+                        readOnlyHint: ['search_products', 'filter_by_category', 'get_product', 'get_cart'].includes(tool.name),
+                        consequentialHint: ['checkout', 'add_to_cart', 'remove_from_cart'].includes(tool.name),
+                        untrustedContentHint: false
+                      },
+                      execute: async (args, { signal }) => {
                         try {
                           // Map frontend tool names to backend tool names
                           let backendToolName = tool.name;
@@ -199,7 +204,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                             return JSON.stringify({ message: 'This is a client-side tool' });
                           }
 
-                          // Call the backend MCP server
+                          // Call the backend MCP server with cancellation support
                           const response = await fetch('/api/mcp', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -208,7 +213,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                               method: 'tools/call',
                               params: { name: backendToolName, arguments: backendArgs },
                               id: Date.now()
-                            })
+                            }),
+                            signal: signal
                           });
 
                           const data = await response.text();
@@ -220,6 +226,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                           }
                           return data;
                         } catch (error) {
+                          if (error.name === 'AbortError') {
+                            return JSON.stringify({ cancelled: true, message: 'Tool execution cancelled by user or agent' });
+                          }
                           return JSON.stringify({ error: error.message });
                         }
                       }
@@ -234,7 +243,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   window.__webmcpReady = true;
                   window.__webmcpToolsCount = registeredCount;
                   window.dispatchEvent(new CustomEvent('webmcp-ready', { detail: { ready: true, toolsCount: registeredCount } }));
-                  console.log('%c✅ WebMCP tools registered using navigator.registerTool (' + registeredCount + ' tools)', 'color: #4caf50; font-weight: bold;');
+                  console.log('%c✅ WebMCP tools registered (' + registeredCount + ' tools)', 'color: #4caf50; font-weight: bold;');
+
+                  // Listen for tool changes
+                  document.modelContext.addEventListener('toolchange', () => {
+                    console.log('%c🔄 Available tools have changed', 'color: #2196f3');
+                  });
                 } else {
                   console.warn('%c⚠️ No tools registered', 'color: #ff9800;');
                 }
